@@ -5,6 +5,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 
+def user_logout(request):
+    logout(request)
+    return redirect('profile')
+
 def profile(request):
     return render(request,'./user/profile.html')
 
@@ -27,6 +31,7 @@ def user_login(request):
                     else:
                         message='帳號有誤!'                
                 else:
+                    login(request,user)
                     message='登入中...'
                     return redirect('profile')
 
