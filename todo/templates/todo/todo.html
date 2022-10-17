@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+<title>首頁</title>
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Todolist</h1>
+{% if not request.user.is_authenticated %}
+<h3>請先註冊或登入</h3>
+{% else %}
+<ul>
+    {% if not todos %}
+    <h3>目前無代辦事項，請先新增</h3>
+    {% else %}
+    {% for todo in todos %}
+    {% if todo.important is True %}
+    <span style="color:red">(重要)</span>
+    {% endif %}
+    <li><a href="{% url 'viewtodo' todo.id %}">{{todo.title}}</a>-{{todo.created}}</li>
+
+    {% endfor %}
+    {% endif %}
+</ul>
+{% endif %}
+
+{% endblock %}

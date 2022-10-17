@@ -1,0 +1,10 @@
+from django.contrib import admin
+from django.urls import path,include
+from . import views
+
+
+urlpatterns = [
+    path('',views.todo,name='todo'),
+    path('view/<int:id>',views.viewtodo,name='viewtodo')
+    
+]
