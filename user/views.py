@@ -1,10 +1,16 @@
 from atexit import register
 from email import message
+import email
 from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm
+#from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from .forms import MyUserForm
+from django.shortcuts import get_object_or_404
+from .forms import MyUserForm
+from datetime import datetime
+from sqlite3 import auth_user
 
 
 
@@ -16,6 +22,29 @@ def user_logout(request):
 
 @login_required
 def profile(request):
+    todo=get_object_or_404(auth_user,id=id)
+    if request.method=='GET':
+        form=MyUserForm(instance=todo)
+    elif request.method=='POST':
+        print(request.POST)
+        # 更新
+        if request.POST.get('update'):
+            # 將POST回傳值填入todo ，產生Form表單
+            form=MyUserForm(request.POST,instance=todo)
+            if form.is_valid():
+                # 資料暫存
+                todo=form.save(commit=False)
+                if todo.completed:
+                # 更新完成日期
+                    todo.date_completed=datetime.now()
+                else:
+                    todo.date_completed=None
+                # 更新資料
+                form.save()
+        # 刪除之後馬上回首頁
+        elif request.POST.get('delete'):
+            todo.delete()
+            return redirect('todo')
     return render(request,'./user/profile.html')
 
 
@@ -50,7 +79,7 @@ def user_login(request):
 # Create your views here.
 def user_register(request):
     
-    form=UserCreationForm()
+    form=MyUserForm()
     message=''
    
     if request.method=='GET':
@@ -61,6 +90,7 @@ def user_register(request):
         username=request.POST.get('username')
         password1=request.POST.get('password1')
         password2=request.POST.get('password2')
+        email=request.POST.get('email')
         
         if len(password1)<8:
             message='密碼少於8個字元'
@@ -70,7 +100,7 @@ def user_register(request):
             if User.objects.filter(username=username).exists():
                 message='帳號重複'
             else:
-                user=User.objects.create_user(username=username,password=password1)
+                user=User.objects.create_user(username=username,password=password1,email=email)
                 user.save()
 
                 message='註冊成功!'

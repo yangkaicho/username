@@ -14,7 +14,15 @@
     <li>超級管理者:否</li>
     {% endif %}
 </ul>
-<br>
+
+
+<hr>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" name="update" value="更新">
+    <input type="submit" name="delete" value="刪除">
+</form>
 
 {% endif %}
 {% endblock %}
