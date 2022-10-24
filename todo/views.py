@@ -5,20 +5,26 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .forms import TodoForm
 from django.contrib.auth import authenticate,login,logout
+from datetime import datetime
 # Create your views here.
 def create_todo(request):
     
     
-    if request.method=='GET':
-        form=TodoForm()
-    elif request.method=='POST':
-        if request.user.is_authenticated:
-            form=TodoForm(request.POST)
-            todo=form.save(commit=False)
-            todo.user=request.user
-            todo.save()
-            return redirect('todo')
-    return render(request,'./todo/createtodo.html',{'form':form})
+    
+    form=TodoForm()
+    try:
+        if request.method=='POST':
+            if request.user.is_authenticated:
+                form=TodoForm(request.POST)
+                todo=form.save(commit=False)
+                todo.user=request.user
+                todo.date_completed=datetime.now() if todo.completed else None
+                todo.save()
+                return redirect('todo')
+        return render(request,'./todo/createtodo.html',{'form':form})
+    except Exception as e:
+        print(e)
+        message='資料錯誤'
 
 def todo(request):
     todos=None
@@ -36,6 +42,31 @@ def todo(request):
 def viewtodo(request,id):
     # todo=Todo.objects.get(id=id)
     todo=get_object_or_404(Todo,id=id)
+    if request.method=='GET':
+        form=TodoForm(instance=todo)
+    elif request.method=='POST':
+        print(request.POST)
+        # 更新
+        if request.POST.get('update'):
+            # 將POST回傳值填入todo ，產生Form表單
+            form=TodoForm(request.POST,instance=todo)
+            if form.is_valid():
+                # 資料暫存
+                todo=form.save(commit=False)
+                if todo.completed:
+                # 更新完成日期
+                    todo.date_completed=datetime.now()
+                else:
+                    todo.date_completed=None
+                # 更新資料
+                form.save()
+        # 刪除之後馬上回首頁
+        elif request.POST.get('delete'):
+            todo.delete()
+            return redirect('todo')
+            
+
+
     print(todo)
 
-    return render(request,'./todo/viewtodo.html',{'todo':todo})
+    return render(request,'./todo/viewtodo.html',{'todo':todo,'form':form})
