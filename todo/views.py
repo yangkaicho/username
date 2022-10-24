@@ -8,10 +8,30 @@ from django.contrib.auth import authenticate,login,logout
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+def completed_by_id(request,id):
+    todo=Todo.objects.get(id=id)
+    todo.completed=not todo.completed
+    todo.date_completed=datetime.now() if todo.completed else None
+    todo.save()
+    return redirect('todo')
+
+
+
+
+
+
+@login_required
+def delete(request,id):
+    todo=Todo.objects.get(id=id)
+    todo.delete()
+    return redirect('todo')
+
+
+
 @login_required
 def completed(request):
     todos=Todo.objects.filter(user=request.user,completed=True)
-    todos.Todo.objects.all()
     return render(request,'./todo/completed.html',{'todos':todos})
 
 
@@ -38,7 +58,7 @@ def create_todo(request):
 def todo(request):
     todos=None
     if request.user.is_authenticated:
-        todos=Todo.objects.filter(user=request.user)
+        todos=Todo.objects.filter(user=request.user,completed=False)
     
     print(todos)
 

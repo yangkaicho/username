@@ -4,8 +4,24 @@
 
 <title>首頁</title>
 {% endblock %}
+{% block style %}
+<style>
+    form {
+        display: inline-block;
+    }
 
+    li {
+        display: inline-block;
+        width: 300px;
+        background-color: aliceblue;
+        margin: 6px 0px;
+        border: 2px solid darkblue;
+        padding: 6px;
+        border-radius: 6px;
+    }
+</style>
 
+{% endblock %}
 {% block content %}
 
 <h1>Todolist</h1>
@@ -28,7 +44,14 @@
             {% else %}
             {{todo.title}}
             {% endif %}
-        </a>
+        </a><br>
+        <form action="{% url 'delete' todo.id %}">
+            <button type="submit">刪除</button>
+        </form>
+
+        <form action="{% url 'completed_by_id' todo.id %}">
+            <button type="submit">完成</button>
+        </form>
     </li>
 
     {% endfor %}
