@@ -24,7 +24,7 @@
         <small>{{todo.created}}</small><br>
         ---><a href="{% url 'viewtodo' todo.id %}">
             {% if todo.completed %}
-            <s>{{todo.title}}</s>
+
             {% else %}
             {{todo.title}}
             {% endif %}

@@ -6,7 +6,16 @@ from django.shortcuts import get_object_or_404
 from .forms import TodoForm
 from django.contrib.auth import authenticate,login,logout
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+@login_required
+def completed(request):
+    todos=Todo.objects.filter(user=request.user,completed=True)
+    todos.Todo.objects.all()
+    return render(request,'./todo/completed.html',{'todos':todos})
+
+
+@login_required
 def create_todo(request):
     
     
@@ -38,7 +47,7 @@ def todo(request):
 
     return render(request,'./todo/todo.html',{'todos':todos})
 
-
+@login_required
 def viewtodo(request,id):
     # todo=Todo.objects.get(id=id)
     todo=get_object_or_404(Todo,id=id)

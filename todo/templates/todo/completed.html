@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>已完成事項</title>
+{% endblock %}
+
+{% block content %}
+
+
+
+<ul>
+
+
+
+    {% for todo in todos %}
+    <li>
+        {% if todo.important is True %}
+        <span style="color:red">(重要)</span>
+        {% endif %}
+        <small>{{todo.date_completed}}</small><br>
+        ---><a href="{% url 'viewtodo' todo.id %}">
+            {{todo.title}}
+
+
+
+
+        </a>
+    </li>
+
+    {% endfor %}
+
+</ul>
+{% endblock %}
