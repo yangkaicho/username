@@ -1,0 +1,13 @@
+ form {
+     display: inline-block;
+ }
+
+ li {
+     display: inline-block;
+     width: 300px;
+     background-color: aliceblue;
+     margin: 6px 0px;
+     border: 2px solid darkblue;
+     padding: 6px;
+     border-radius: 6px;
+ }
