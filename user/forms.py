@@ -15,3 +15,4 @@ def save(self,commit=True):
     user.email=self.changed_data['email']
     if commit:
         user.save()
+

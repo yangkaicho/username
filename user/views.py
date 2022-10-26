@@ -10,7 +10,7 @@ from .forms import MyUserForm
 from django.shortcuts import get_object_or_404
 from .forms import MyUserForm
 from datetime import datetime
-from sqlite3 import auth_user
+
 
 
 
@@ -22,29 +22,6 @@ def user_logout(request):
 
 @login_required
 def profile(request):
-    todo=get_object_or_404(auth_user,id=id)
-    if request.method=='GET':
-        form=MyUserForm(instance=todo)
-    elif request.method=='POST':
-        print(request.POST)
-        # 更新
-        if request.POST.get('update'):
-            # 將POST回傳值填入todo ，產生Form表單
-            form=MyUserForm(request.POST,instance=todo)
-            if form.is_valid():
-                # 資料暫存
-                todo=form.save(commit=False)
-                if todo.completed:
-                # 更新完成日期
-                    todo.date_completed=datetime.now()
-                else:
-                    todo.date_completed=None
-                # 更新資料
-                form.save()
-        # 刪除之後馬上回首頁
-        elif request.POST.get('delete'):
-            todo.delete()
-            return redirect('todo')
     return render(request,'./user/profile.html')
 
 
