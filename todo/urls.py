@@ -9,5 +9,6 @@ urlpatterns = [
     path('create/',views.create_todo,name='createtodo'),
     path('completed',views.completed,name='completed'),
     path('delete/<int:id>',views.delete,name='delete'),
-    path('completed/<int:id>',views.completed_by_id,name='completed_by_id')
+    path('completed/<int:id>',views.completed_by_id,name='completed_by_id'),
+    path('sort/',views.sort_todo,name='sort'),
 ]

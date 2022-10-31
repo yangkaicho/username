@@ -9,6 +9,9 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+
+
+
 def completed_by_id(request,id):
     todo=Todo.objects.get(id=id)
     todo.completed=not todo.completed
@@ -54,6 +57,26 @@ def create_todo(request):
     except Exception as e:
         print(e)
         message='資料錯誤'
+
+
+@login_required
+def sort_todo(request):
+    todos=Todo.objects.filter(user=request.user)
+    # None
+    sort=request.COOKIES.get('sort')
+    sort=False  if not sort or eval(sort) else True
+    
+    
+    if sort:
+        
+        todos=todos.order_by('-created')
+    if not sort:
+        todos=todos.order_by('created')
+
+    response=render(request,'./todo/todo.html',{'todos':todos})
+    response.set_cookie('sort',sort)
+    return response
+
 
 def todo(request):
     todos=None

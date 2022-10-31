@@ -17,19 +17,24 @@
     {% if not todos %}
     <h3>目前無代辦事項，請先新增</h3>
     {% else %}
+    <a href="{% url 'sort' %}">排序</a>
+    <p></p>
     {% for todo in todos %}
     <li>
-        {% if todo.important is True %}
-        <span style="color:red">(重要)</span>
-        {% endif %}
-        <small>{{todo.created}}</small><br>
-        ---><a href="{% url 'viewtodo' todo.id %}">
-            {% if todo.completed %}
-
-            {% else %}
-            {{todo.title}}
+        <p>
+            {% if todo.important is True %}
+            <span style="color:red">(重要)</span>
             {% endif %}
-        </a><br>
+            <small>{{todo.created}}</small><br>
+            ---><a href="{% url 'viewtodo' todo.id %}">
+                {% if todo.completed %}
+
+                {% else %}
+                {{todo.title}}
+
+                {% endif %}
+
+            </a><br>
         <form action="{% url 'delete' todo.id %}">
             <button type="submit">刪除</button>
         </form>
@@ -37,6 +42,7 @@
         <form action="{% url 'completed_by_id' todo.id %}">
             <button type="submit">完成</button>
         </form>
+        </p>
     </li>
 
     {% endfor %}
