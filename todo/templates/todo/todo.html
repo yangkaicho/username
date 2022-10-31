@@ -35,6 +35,13 @@
                 {% endif %}
 
             </a><br>
+        <div id="image">
+            {% if todo.image %}
+            <img src="{{todo.image.url}}" alt="" srcset="" width="300px" height="200px">
+
+
+        </div>
+        {% endif %}
         <form action="{% url 'delete' todo.id %}">
             <button type="submit">刪除</button>
         </form>
@@ -47,7 +54,9 @@
 
     {% endfor %}
     {% endif %}
+
 </ul>
+
 {% endif %}
 
 {% endblock %}

@@ -15,6 +15,7 @@
 - settings.py[INSTALLED_APPS]
   - ''user.apps.UserConfig'
 - 進行資料庫同步
+    - python manage.py makemigrations
     - python manage.py migrate
 - 新增超級使用者
     - python manage.py createsuperuser

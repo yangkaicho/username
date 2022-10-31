@@ -1,3 +1,4 @@
+from email.mime import image
 from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ class Todo(models.Model):
     date_completed=models.DateTimeField(blank=True,null=True)
     important=models.BooleanField(default=False)
     completed=models.BooleanField(default=False)
-
+    image=models.ImageField(blank=True,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE)
 
 
